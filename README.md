@@ -16,6 +16,13 @@ In 'index.js' you will see 'Hash' and 'Threads', Hash is the amount of RAM you w
 ![image](https://user-images.githubusercontent.com/80098945/209549508-376f214f-6abe-4b2f-a0b6-eb1152542c7e.png)
 
 
+## How To Use
+### First Time
+- Open command prompt and navigate to the folder the files are stored in using 'cd "PATH OF FOLDER"'
+- Make sure you have NodeJS installed then type 'npm install'
+- Type 'node .' each time you want to use script (THE SERVER MUST BE ON OR IT WILL ERROR IN ROBLOX)
+- Run this script ```loadstring(game:HttpGet(""))()```
+
 ## The Game
 [The link to the game this is made for](https://www.roblox.com/games/6222531507/CHESS)
 
