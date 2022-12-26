@@ -1,5 +1,6 @@
 
 # Roblox Chess Script
+# ⚠️ THIS SCRIPT IS FOR SYNPASE X ONLY ⚠️
 ## This was made using Stockfish for NodeJS
 
 ## ⚠️ STOCKFISH TYPE ⚠️
@@ -21,7 +22,7 @@ In 'index.js' you will see 'Hash' and 'Threads', Hash is the amount of RAM you w
 - Open command prompt and navigate to the folder the files are stored in using 'cd "PATH OF FOLDER"'
 - Make sure you have NodeJS installed then type 'npm install'
 - Type 'node .' each time you want to use script (THE SERVER MUST BE ON OR IT WILL ERROR IN ROBLOX)
-- Run this script ```loadstring(game:HttpGet(""))()```
+- Run this script ```loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/xvhHaloxx/Roblox-Scripts/chess-ai/RUN%20THIS%20IN%20ROBLOX.lua"))()```
 
 ## The Game
 [The link to the game this is made for](https://www.roblox.com/games/6222531507/CHESS)
