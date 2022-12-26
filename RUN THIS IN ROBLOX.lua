@@ -192,8 +192,9 @@ function runGame()
     })
     local result = res.Body
 
+    print('Result: ' .. result)
     -- Ensure result is valid
-    if string.len(result) > 4 then
+    if string.len(result) > 5 then
         error(result)
     end
 
