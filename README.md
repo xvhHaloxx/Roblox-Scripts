@@ -28,14 +28,16 @@ In 'index.js' you will see 'Hash' and 'Threads', Hash is the amount of RAM you w
 - Run this script ```loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/xvhHaloxx/Roblox-Scripts/chess-ai/RUN%20THIS%20IN%20ROBLOX.lua"))()```
 ---
   
-## The Game
-[The link to the game this is made for](https://www.roblox.com/games/6222531507/CHESS)
+## [The Game](https://www.roblox.com/games/6222531507/CHESS)
 ---
   
 ## Requirements
 [NodeJS](https://nodejs.org/en/)
+---
+  
 ## Credits
 ### I didn't create all of this, I just fixed some mistakes of 2 other scripts
 - [First guy (I used his highlighting of pieces)](https://v3rmillion.net/showthread.php?tid=1194059)
 - [Second guy (Pretty much everything else)](https://v3rmillion.net/showthread.php?tid=1095547)
+- [My friend (Moral support when I wanted to kms because it wasn't working)](https://www.youtube.com/@xyahsvr)
 ### I made it work with every skin I know of so far.
