@@ -7,12 +7,12 @@ If you have an old CPU then change the path for stockfish in the 'index.js' file
 
 ## ⚠️ Hardware Power To Give Stockfish ⚠️
 In 'index.js' you will see 'Hash' and 'Threads', Hash is the amount of RAM you want to use (Do 1024 x <GB of RAM to use>). Threads are the threads in your CPU you can see this in Task Manager
-- Windows 10
-Go to the Performance tab then look at 'Logical Processors', change 'Threads' to the amount you want to use (MAKE SURE YOU HAVE ATLEAST 4 OR 5 THREADS LEFT)
+### Windows 10
+- Go to the Performance tab then look at 'Logical Processors', change 'Threads' to the amount you want to use (MAKE SURE YOU HAVE ATLEAST 4 OR 5 THREADS LEFT)
 ![image](https://user-images.githubusercontent.com/80098945/209549257-f87d1f87-622f-4b0b-879a-7882caf7ce72.png)
 
-- Windows 11
-It is pretty much the exact same thing in Windows 11. It just looks a bit different
+### Windows 11
+- It is pretty much the exact same thing in Windows 11. It just looks a bit different
 ![image](https://user-images.githubusercontent.com/80098945/209549508-376f214f-6abe-4b2f-a0b6-eb1152542c7e.png)
 
 
