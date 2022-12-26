@@ -17,7 +17,6 @@ local pieces = {
     ["King"] = "k"
 }
 
--- Fuck you error logger
 if game:GetService("ReplicatedStorage").Connections:FindFirstChild("ReportClientError") then
     game:GetService("ReplicatedStorage").Connections.ReportClientError:Destroy()
     for _,v in pairs(getconnections(game:GetService("ScriptContext").Error)) do
@@ -146,7 +145,11 @@ function getPiece(tile)
     local boardTile = game:GetService("Workspace").Board[tile]
 
     if boardTile.ClassName == 'Model' then
-        rayOrigin = game:GetService("Workspace").Board[tile]['Meshes/tile_a'].Position
+        if game:GetService("Workspace").Board[tile]:FindFirstChild('Meshes/tile_a') then
+            rayOrigin = game:GetService("Workspace").Board[tile]['Meshes/tile_a'].Position
+        else
+            rayOrigin = game:GetService("Workspace").Board[tile]['Tile'].Position
+        end
     else
         rayOrigin = game:GetService("Workspace").Board[tile].Position
     end
