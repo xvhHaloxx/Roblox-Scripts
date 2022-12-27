@@ -186,13 +186,7 @@ function runGame()
     end
 
     -- Ask engine for result using fen encoded board
-    -- local res = syn.request({
-    --     Url = "http://localhost:3000/api/solve?fen=" .. HttpService:UrlEncode(board2fen(board)),
-    --     Method = "GET"
-    -- })
-
     local result = game:HttpGet("http://localhost:3000/api/solve?fen=" .. HttpService:UrlEncode(board2fen(board)))
-    -- local result = res.Body
 
     print('Result: ' .. result)
     -- Ensure result is valid
