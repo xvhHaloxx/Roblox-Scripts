@@ -1,7 +1,7 @@
 
 # Roblox Chess Script
 
-# ⚠️ THIS SCRIPT IS FOR SYNPASE X ONLY ⚠️
+# ⚠️ UPDATE! NO LONGER SYNAPSEX ONLY! ⚠️
 ---
 ## This was made using Stockfish for NodeJS
 ---
