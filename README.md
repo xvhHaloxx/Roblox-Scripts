@@ -24,8 +24,9 @@ In 'index.js' you will see 'Hash' and 'Threads', Hash is the amount of RAM you w
 ### First Time
 - Open command prompt and navigate to the folder the files are stored in using 'cd "PATH OF FOLDER"'
 - Make sure you have NodeJS installed then type 'npm install'
-- Type 'node .' each time you want to use script (THE SERVER MUST BE ON OR IT WILL ERROR IN ROBLOX)
-- Run this script ```loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/xvhHaloxx/Roblox-Scripts/chess-ai/RUN%20THIS%20IN%20ROBLOX.lua"))()```
+## After Installation
+- Each time you want to use script, open command prompt and make sure the directory is where all the files are. Type 'node .' and press enter. The server is now on!
+- Run this script ```loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/xvhHaloxx/Roblox-Scripts/chess-ai/RUN%20THIS%20IN%20ROBLOX.lua"))()``` (THE SERVER MUST BE ON OR IT WILL ERROR WHEN CALCULATING BEST MOVE)
 ---
   
 ## [The Game](https://www.roblox.com/games/6222531507/CHESS)
