@@ -1,12 +1,41 @@
-if (shared.runBind == nil) then
+if shared.runBind == nil then
     shared.runBind = Enum.KeyCode.B;
 end
 
+if shared.espColor == nil then
+    shared.espColor = Color3.new(0, 1, 0.164705)
+end
+
+if shared.fillTransparency == nil then
+    shared.fillTransparency = 0.2
+end
+
+if shared.outlineColor == nil then
+    shared.outlineColor = Color3.new(255, 255, 255)
+end
+
+if shared.outlineTransparency == nil then
+    shared.outlineTransparency = .5
+end
+
+local running = false
+
 local HttpService = game:GetService("HttpService")
 local plr = game:GetService("Players").LocalPlayer
-local scriptPath = plr.PlayerGui:WaitForChild("Client")
 local UIS = game:GetService("UserInputService")
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sw1ndlerScripts/RobloxScripts/main/Esp%20Library/main.lua",true))()
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Chess Script",
+    LoadingTitle = "Loading Chess Script",
+    LoadingSubtitle = "By Haloxx"
+ })
+
+local MainTab = Window:CreateTab("Main", 4483362458)
+local SettingsTab = Window:CreateTab("Settings", 4483362458)
+
+local Label = MainTab:CreateLabel("Status: Idle")
 
 local pieces = {
     ["Pawn"] = "p",
@@ -71,8 +100,14 @@ end
 
 function willCauseDesync(board)
     -- Bot match detection
-    if board.players[false] == plr and board.players[true] == plr then
-        return board.activeTeam == false
+    local state, message = pcall(function()
+        if board.players[false] == plr and board.players[true] == plr then
+            return board.activeTeam == false
+        end
+    end)
+
+    if not state then
+        return false
     end
 
     for i,v in pairs(board.players) do
@@ -81,7 +116,7 @@ function willCauseDesync(board)
             return not (board.activeTeam == i)
         end
     end
-    
+
     return true
 end
 
@@ -181,16 +216,16 @@ function runGame()
     local board = getBoard()
     
     -- Check if we're able to run without desync
-    if willCauseDesync(board) then
+    if not willCauseDesync(board) then
+        Label:Set("Status: Error!")
         return false
     end
 
-    -- Ask engine for result using fen encoded board
     local result = game:HttpGet("http://localhost:3000/api/solve?fen=" .. HttpService:UrlEncode(board2fen(board)))
 
-    print('Result: ' .. result)
     -- Ensure result is valid
     if string.len(result) > 5 then
+        Label:Set("Status: Error!")
         error(result)
     end
 
@@ -212,18 +247,20 @@ function runGame()
 
 
     ESP:addHighlight(pieceToMove, {
-        FillColor = Color3.new(0, 1, 0.164705),
-        FillTransparency = 0.2,
+        FillColor = shared.espColor,
+        FillTransparency = shared.fillTransparency,
         OutlineColor = Color3.new(255, 255, 255),
         OutlineTransparency = 0.5
     })
     
     ESP:addHighlight(placeToMove, {
-        FillColor = Color3.new(0, 1, 0.164705),
-        FillTransparency = 0.2,
+        FillColor = shared.espColor,
+        FillTransparency = shared.fillTransparency,
         OutlineColor = Color3.new(255, 255, 255),
         OutlineTransparency = 0.5
     })
+
+    Label:Set("Status: Done!")
 
     if playerIsWhite() then
         repeat
@@ -236,24 +273,111 @@ function runGame()
         until plr.PlayerGui.GameStatus.Black.Visible == false or gameInProgress() == false
         ESP:clearEsp()
     end
-    
     return true
 end
 
-local running = false
+local ColorPicker
+local FillTransparencySlider
+local ColorPicker2
+local OutlineTransparencySlider2
+local Keybind
 
-UIS.InputEnded:Connect(function(inputObject, gameProcessed)
-    if inputObject.KeyCode == shared.runBind and not gameProcessed then
+local ResetAllValuesButton = MainTab:CreateButton({
+    Name = "Reset All Settings",
+    Callback = function()
+        shared.fillTransparency = 0.2
+        shared.espColor = Color3.new(0, 1, 0.164705)
+        shared.runBind = Enum.KeyCode.B;
+        shared.outlineColor = Color3.new(255, 255, 255)
+        shared.outlineTransparency = .5
+
+        ColorPicker:Set(Color3.new(0, 1, 0.164705))
+        FillTransparencySlider:Set(.2)
+
+        ColorPicker2:Set(Color3.new(255, 255, 255))
+        OutlineTransparencySlider2:Set(.5)
+
+        Keybind:Set("B")
+    end,
+})
+
+Keybind = MainTab:CreateKeybind({
+    Name = "Run Stockfish Bind",
+    CurrentKeybind = UIS:GetStringForKeyCode(shared.runBind),
+    HoldToInteract = false,
+    Flag = "Keybind1",
+    Callback = function(keybind)
         if not running then
             running = true
+            Label:Set("Status: Calculating")
             if runGame() then
                 print("Ran AI")
             else
                 print("Cannot run AI right now")
+                Label:Set("Status: Error!")
+                task.wait(.5)
             end
+            Label:Set("Status: Idle")
+            running = false
         end
+    end,
+})
+
+ColorPicker = MainTab:CreateColorPicker({
+    Name = "Change ESP Color",
+    Color = shared.espColor,
+    Flag = "ColorPicker1",
+    Callback = function(value)
+        shared.espColor = value
     end
-    running = false
+})
+
+FillTransparencySlider = MainTab:CreateSlider({
+    Name = "Fill Transparency",
+    Range = {0, 1},
+    Increment = .1,
+    Suffix = "",
+    CurrentValue = shared.fillTransparency,
+    Flag = "Slider1",
+    Callback = function(value)
+        shared.fillTransparency = value
+    end,
+})
+
+MainTab:CreateLabel("")
+
+ColorPicker2 = MainTab:CreateColorPicker({
+    Name = "Change Outline Color",
+    Color = shared.outlineColor,
+    Flag = "ColorPicker2",
+    Callback = function(value)
+        shared.outlineColor = value
+    end
+})
+
+OutlineTransparencySlider2 = MainTab:CreateSlider({
+    Name = "Outline Transparency",
+    Range = {0, 1},
+    Increment = .1,
+    Suffix = "",
+    CurrentValue = shared.outlineTransparency,
+    Flag = "Slider2",
+    Callback = function(value)
+        shared.outlineTransparency = value
+    end,
+})
+
+local DestoryUIButton = SettingsTab:CreateButton({
+    Name = "Fully Destory UI",
+    Callback = function()
+        Rayfield:Destroy()
+    end,
+})
+
+task.spawn(function()
+    while task.wait() do
+        shared.runBind = Enum.KeyCode[Keybind.CurrentKeybind]
+    end
 end)
 
 print('executed')
