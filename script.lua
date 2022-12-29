@@ -66,7 +66,7 @@ local Window = Rayfield:CreateWindow({
 local MainTab = Window:CreateTab("Main", 4483362458)
 local SettingsTab = Window:CreateTab("Options", 4483362458)
 
-MainTab:CreateSection("Reset All Settings")
+MainTab:CreateSection("Says What The Status Of The Bot Is")
 local Label = MainTab:CreateLabel("Status: Idle")
 
 local pieces = {
@@ -257,6 +257,11 @@ function runGame()
 
     local result = game:HttpGet("http://localhost:3000/api/solve?fen=" .. HttpService:UrlEncode(board2fen(board)))
 
+    if result == "" then
+        Label:Set("Status: Chess Server Is Not Running!")
+        warn("server is not running")
+        return "terminal"
+    end
     -- Ensure result is valid
     if string.len(result) > 5 then
         Label:Set("Status: Error!")
@@ -316,7 +321,7 @@ local ColorPicker2
 local OutlineTransparencySlider2
 local Keybind
 
-MainTab:CreateSection("Reset All Settings")
+MainTab:CreateSection("Resets Keybind and Color Settings")
 
 local ResetAllValuesButton = MainTab:CreateButton({
     Name = "Reset All Settings",
@@ -360,8 +365,19 @@ Keybind = MainTab:CreateKeybind({
             end
             running = true
             Label:Set("Status: Calculating")
-            if runGame() then
+            local gamerunning = runGame()
+            if gamerunning == true then
                 print("Ran AI")
+                Label:Set("Status: Idle")
+            elseif gamerunning == false then
+                print("Cannot run AI right now")
+                Label:Set("Status: Error!")
+                task.wait(.5)
+                Label:Set("Status: Idle")
+            elseif gamerunning == "terminal" then
+                print("Server is not running!")
+                Label:Set("Status: Chess Server Is Not Running!")
+                task.wait(1)
                 Label:Set("Status: Idle")
             else
                 print("Cannot run AI right now")
