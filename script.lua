@@ -59,8 +59,8 @@ local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shle
 
 local Window = Rayfield:CreateWindow({
     Name = "Chess Script",
-    LoadingTitle = "Loading Chess Script",
-    LoadingSubtitle = "By Haloxx",
+    -- LoadingTitle = "Loading Chess Script",
+    -- LoadingSubtitle = "By Haloxx",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "Chess Script Config", -- Create a custom folder for your hub/game
@@ -352,14 +352,12 @@ Keybind = MainTab:CreateKeybind({
         if not running and not destoryed then
             if gameInProgress() == true then
                 if playerIsWhite() and plr.PlayerGui.GameStatus.White.Visible == false then
-                    print("Cannot run AI right now 1")
                     Label:Set("Status: It Is Not Your Turn!")
                     task.wait(.5)
                     Label:Set("Status: Idle")
                     return false
                 end
                 if not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
-                    print("Cannot run AI right now 2")
                     Label:Set("Status: It Is Not Your Turn!")
                     task.wait(.5)
                     Label:Set("Status: Idle")
@@ -370,20 +368,16 @@ Keybind = MainTab:CreateKeybind({
             Label:Set("Status: Calculating")
             local gamerunning = runGame()
             if gamerunning == true then
-                print("Ran AI")
                 Label:Set("Status: Idle")
             elseif gamerunning == false then
-                print("Cannot run AI right now 3")
                 Label:Set("Status: Not In A Game!")
                 task.wait(.5)
                 Label:Set("Status: Idle")
             elseif gamerunning == "terminal" then
-                print("Server is not running!")
                 Label:Set("Status: Chess Server Is Not Running!")
                 task.wait(2)
                 Label:Set("Status: Idle")
             else
-                print("Cannot run AI right now 4")
                 Label:Set("Status: Unknown Error!")
                 task.wait(.5)
                 Label:Set("Status: Idle")
