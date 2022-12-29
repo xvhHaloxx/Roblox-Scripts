@@ -59,8 +59,8 @@ local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shle
 
 local Window = Rayfield:CreateWindow({
     Name = "Chess Script",
-    LoadingTitle = "Loading Chess Script",
-    LoadingSubtitle = "By Haloxx",
+    -- LoadingTitle = "Loading Chess Script",
+    -- LoadingSubtitle = "By Haloxx",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "Chess Script Config", -- Create a custom folder for your hub/game
@@ -343,8 +343,6 @@ local ResetAllValuesButton = MainTab:CreateButton({
     end,
 })
 
-MainTab:CreateSection("Press Key To Calculate Best Move")
-
 Keybind = MainTab:CreateKeybind({
     Name = "Run Stockfish Bind",
     CurrentKeybind = UIS:GetStringForKeyCode(shared.runBind),
@@ -356,36 +354,32 @@ Keybind = MainTab:CreateKeybind({
                 if playerIsWhite() and plr.PlayerGui.GameStatus.White.Visible == false then
                     Label:Set("Status: It Is Not Your Turn!")
                     task.wait(.5)
-                    Label:Set("Status: Idle")
                     return false
-                end
-                if not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
+
+                elseif not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
                     Label:Set("Status: It Is Not Your Turn!")
                     task.wait(.5)
-                    Label:Set("Status: Idle")
                     return false
+                else
+                    running = true
+                    Label:Set("Status: Calculating")
+                    local gamerunning = runGame()
+
+                    if gamerunning == true then
+                    elseif gamerunning == "terminal" then
+                        Label:Set("Status: Chess Server Is Not Running!")
+                        task.wait(2)
+                    else
+                        Label:Set("Status: Unknown Error!")
+                        task.wait(.5)
+                    end
+                    running = false
                 end
-            end
-            running = true
-            Label:Set("Status: Calculating")
-            local gamerunning = runGame()
-            if gamerunning == true then
-                Label:Set("Status: Idle")
-            elseif gamerunning == false then
+            else
                 Label:Set("Status: Not In A Game!")
                 task.wait(.5)
-                Label:Set("Status: Idle")
-            elseif gamerunning == "terminal" then
-                Label:Set("Status: Chess Server Is Not Running!")
-                task.wait(2)
-                Label:Set("Status: Idle")
-            else
-                Label:Set("Status: Unknown Error!")
-                task.wait(.5)
-                Label:Set("Status: Idle")
             end
             Label:Set("Status: Idle")
-            running = false
         end
     end,
 })
