@@ -1,3 +1,17 @@
+for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
+    if v.Name == "Rayfield-Old" then
+        v:Destroy()
+        print("destoryed Rayfield-Old")
+    end
+
+    if v.Name == "Rayfield" then
+        v:Destroy()
+        print("destoryed Rayfield")
+    end
+end
+
+local destoryed = false
+
 if shared.runBind == nil then
     shared.runBind = Enum.KeyCode.B;
 end
@@ -107,7 +121,7 @@ function willCauseDesync(board)
     end)
 
     if not state then
-        return false
+        return message
     end
 
     for i,v in pairs(board.players) do
@@ -216,8 +230,10 @@ function runGame()
     local board = getBoard()
     
     -- Check if we're able to run without desync
-    if not willCauseDesync(board) then
+    local desync = willCauseDesync(board)
+    if desync ~= true and desync ~= false then
         Label:Set("Status: Error!")
+        warn(desync)
         return false
     end
 
@@ -307,15 +323,17 @@ Keybind = MainTab:CreateKeybind({
     HoldToInteract = false,
     Flag = "Keybind1",
     Callback = function(keybind)
-        if not running then
+        if not running and not destoryed then
             running = true
             Label:Set("Status: Calculating")
             if runGame() then
                 print("Ran AI")
+                Label:Set("Status: Idle")
             else
                 print("Cannot run AI right now")
                 Label:Set("Status: Error!")
                 task.wait(.5)
+                Label:Set("Status: Idle")
             end
             Label:Set("Status: Idle")
             running = false
@@ -370,14 +388,26 @@ OutlineTransparencySlider2 = MainTab:CreateSlider({
 local DestoryUIButton = SettingsTab:CreateButton({
     Name = "Fully Destory UI",
     Callback = function()
+        destoryed = true
         Rayfield:Destroy()
+        for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
+            if v.Name == "Rayfield-Old" then
+                v:Destroy()
+                print("destoryed Rayfield-Old")
+            end
+
+            if v.Name == "Rayfield" then
+                v:Destroy()
+                print("destoryed Rayfield")
+            end
+        end
     end,
 })
 
 task.spawn(function()
-    while task.wait() do
+    repeat task.wait()
         shared.runBind = Enum.KeyCode[Keybind.CurrentKeybind]
-    end
+    until destoryed == true
 end)
 
 print('executed')
