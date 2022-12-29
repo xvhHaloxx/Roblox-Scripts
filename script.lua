@@ -1,12 +1,29 @@
+
+if not game.PlaceId == 6222531507 then print("wrong game boy...") end
+
 for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
     if v.Name == "Rayfield-Old" then
         v:Destroy()
-        print("destoryed Rayfield-Old")
+        print("Destoryed Rayfield-Old")
     end
 
     if v.Name == "Rayfield" then
         v:Destroy()
-        print("destoryed Rayfield")
+        print("Destoryed Rayfield")
+    end
+end
+
+for i,v in pairs(game.Workspace.Board:GetChildren()) do
+    if v:FindFirstChild("Highlight") then
+        v:FindFirstChild("Highlight"):Destroy()
+        print("Destoryed Old Hightlight")
+    end
+end
+
+for i,v in pairs(game.Workspace.Pieces:GetChildren()) do
+    if v:FindFirstChild("Highlight") then
+        v:FindFirstChild("Highlight"):Destroy()
+        print("Destoryed Old Hightlight")
     end
 end
 
@@ -47,8 +64,9 @@ local Window = Rayfield:CreateWindow({
  })
 
 local MainTab = Window:CreateTab("Main", 4483362458)
-local SettingsTab = Window:CreateTab("Settings", 4483362458)
+local SettingsTab = Window:CreateTab("Options", 4483362458)
 
+MainTab:CreateSection("Reset All Settings")
 local Label = MainTab:CreateLabel("Status: Idle")
 
 local pieces = {
@@ -298,6 +316,8 @@ local ColorPicker2
 local OutlineTransparencySlider2
 local Keybind
 
+MainTab:CreateSection("Reset All Settings")
+
 local ResetAllValuesButton = MainTab:CreateButton({
     Name = "Reset All Settings",
     Callback = function()
@@ -324,6 +344,20 @@ Keybind = MainTab:CreateKeybind({
     Flag = "Keybind1",
     Callback = function(keybind)
         if not running and not destoryed then
+            if playerIsWhite() and plr.PlayerGui.GameStatus.White.Visible == false then
+                print("Cannot run AI right now")
+                Label:Set("Status: Error!")
+                task.wait(.5)
+                Label:Set("Status: Idle")
+                return false
+            end
+            if not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
+                print("Cannot run AI right now")
+                Label:Set("Status: Error!")
+                task.wait(.5)
+                Label:Set("Status: Idle")
+                return false
+            end
             running = true
             Label:Set("Status: Calculating")
             if runGame() then
@@ -340,6 +374,8 @@ Keybind = MainTab:CreateKeybind({
         end
     end,
 })
+
+MainTab:CreateSection("Highlight Options")
 
 ColorPicker = MainTab:CreateColorPicker({
     Name = "Change ESP Color",
@@ -362,7 +398,7 @@ FillTransparencySlider = MainTab:CreateSlider({
     end,
 })
 
-MainTab:CreateLabel("")
+MainTab:CreateSection("Outline Options")
 
 ColorPicker2 = MainTab:CreateColorPicker({
     Name = "Change Outline Color",
@@ -390,6 +426,7 @@ local DestoryUIButton = SettingsTab:CreateButton({
     Callback = function()
         destoryed = true
         Rayfield:Destroy()
+        ESP:clearEsp()
         for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
             if v.Name == "Rayfield-Old" then
                 v:Destroy()
