@@ -60,7 +60,12 @@ local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shle
 local Window = Rayfield:CreateWindow({
     Name = "Chess Script",
     LoadingTitle = "Loading Chess Script",
-    LoadingSubtitle = "By Haloxx"
+    LoadingSubtitle = "By Haloxx",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "Chess Script Config", -- Create a custom folder for your hub/game
+        FileName = "config"
+    }
  })
 
 local MainTab = Window:CreateTab("Main", 4483362458)
@@ -95,8 +100,7 @@ for _,v in pairs(getreg()) do
         end
     end
 end
-assert(client, "failed to find client")
-
+warn("failed to find client")
 
 -- Board from client
 function getBoard()
@@ -115,7 +119,7 @@ function getLocalTeam(board)
     if board.players[false] == plr and board.players[true] == plr then
         return "w"
     end
-    
+
     for i, v in pairs(board.players) do
         if v == plr then
             -- If the index is true, they are white
@@ -250,21 +254,18 @@ function runGame()
     -- Check if we're able to run without desync
     local desync = willCauseDesync(board)
     if desync ~= true and desync ~= false then
-        Label:Set("Status: Error!")
-        warn(desync)
+        -- Label:Set("Status: Error!")
         return false
     end
 
     local result = game:HttpGet("http://localhost:3000/api/solve?fen=" .. HttpService:UrlEncode(board2fen(board)))
 
     if result == "" then
-        Label:Set("Status: Chess Server Is Not Running!")
-        warn("server is not running")
         return "terminal"
     end
     -- Ensure result is valid
     if string.len(result) > 5 then
-        Label:Set("Status: Error!")
+        -- Label:Set("Status: Error!")
         error(result)
     end
 
@@ -349,19 +350,21 @@ Keybind = MainTab:CreateKeybind({
     Flag = "Keybind1",
     Callback = function(keybind)
         if not running and not destoryed then
-            if playerIsWhite() and plr.PlayerGui.GameStatus.White.Visible == false then
-                print("Cannot run AI right now")
-                Label:Set("Status: Error!")
-                task.wait(.5)
-                Label:Set("Status: Idle")
-                return false
-            end
-            if not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
-                print("Cannot run AI right now")
-                Label:Set("Status: Error!")
-                task.wait(.5)
-                Label:Set("Status: Idle")
-                return false
+            if gameInProgress() == true then
+                if playerIsWhite() and plr.PlayerGui.GameStatus.White.Visible == false then
+                    print("Cannot run AI right now 1")
+                    Label:Set("Status: It Is Not Your Turn!")
+                    task.wait(.5)
+                    Label:Set("Status: Idle")
+                    return false
+                end
+                if not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
+                    print("Cannot run AI right now 2")
+                    Label:Set("Status: It Is Not Your Turn!")
+                    task.wait(.5)
+                    Label:Set("Status: Idle")
+                    return false
+                end
             end
             running = true
             Label:Set("Status: Calculating")
@@ -370,18 +373,18 @@ Keybind = MainTab:CreateKeybind({
                 print("Ran AI")
                 Label:Set("Status: Idle")
             elseif gamerunning == false then
-                print("Cannot run AI right now")
-                Label:Set("Status: Error!")
+                print("Cannot run AI right now 3")
+                Label:Set("Status: Not In A Game!")
                 task.wait(.5)
                 Label:Set("Status: Idle")
             elseif gamerunning == "terminal" then
                 print("Server is not running!")
                 Label:Set("Status: Chess Server Is Not Running!")
-                task.wait(1)
+                task.wait(2)
                 Label:Set("Status: Idle")
             else
-                print("Cannot run AI right now")
-                Label:Set("Status: Error!")
+                print("Cannot run AI right now 4")
+                Label:Set("Status: Unknown Error!")
                 task.wait(.5)
                 Label:Set("Status: Idle")
             end
@@ -464,3 +467,6 @@ task.spawn(function()
 end)
 
 print('executed')
+
+Rayfield:LoadConfiguration()
+print("loaded config")
