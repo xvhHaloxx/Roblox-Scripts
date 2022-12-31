@@ -354,12 +354,10 @@ Keybind = MainTab:CreateKeybind({
                 if playerIsWhite() and plr.PlayerGui.GameStatus.White.Visible == false then
                     Label:Set("Status: It Is Not Your Turn!")
                     task.wait(.5)
-                    return false
 
                 elseif not playerIsWhite() and plr.PlayerGui.GameStatus.Black.Visible == false then
                     Label:Set("Status: It Is Not Your Turn!")
                     task.wait(.5)
-                    return false
                 else
                     running = true
                     Label:Set("Status: Calculating")
