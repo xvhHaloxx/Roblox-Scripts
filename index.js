@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 
 // Engine path
-const enginePath = "stockfish-compatibility/stockfish.exe";
+const enginePath = "stockfish_15.1_win_x64_avx2/stockfish-windows-2022-x86-64-avx2.exe";
 
 // Setup server
 const app = express();
@@ -19,8 +19,15 @@ var engine = new Engine(enginePath);
 async function setup() {
   engine = new Engine(enginePath);
   await engine.init();
-  await engine.setoption('Hash', 2048);
-  await engine.setoption('Threads', 6);
+
+  await engine.setoption('Hash', (1024 * 2)); // This will use 2 GB of RAM
+  await engine.setoption('Threads', 4); // Logical processors of CPU
+
+
+  await engine.setoption('UCI_Elo', 3800),
+  await engine.setoption('Skill Level', 25),
+  await engine.setoption('UCI_LimitStrength', false)
+  await engine.setoption('Ponder', true)
   await engine.isready();
 }
 
@@ -32,14 +39,13 @@ async function setup() {
     console.log(`Ran for ${req.query.fen}`);
     try {
       await engine.position(req.query.fen);
-      console.log(`Successfully applied fen`);
       
       // Set the board to fen string provided and solve it
-      const result = await engine.go({ depth: 16 });
+      const result = await engine.go({ depth: 20 });
 
       // Send back the results
-      console.log(`Got result!`);
       res.send(result.bestmove);
+	  console.log(`Best Move: ${result.bestmove}`)
     } catch (error) {
       setup();
       console.log(error);
