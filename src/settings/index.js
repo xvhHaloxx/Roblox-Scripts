@@ -45,10 +45,20 @@ function MainPrompt() {
             config.threads = amount_of_threads
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`Threads successfully set to ${amount_of_threads}!`);
+            console.log(`${clc.greenBright(`Threads successfully set to ${amount_of_threads}!`)}`);
+        } else if (!(Number(amount_of_threads) > 0 )) {
+            console.clear()
+            console.log(`${clc.redBright('Please input a value more than 0')}`);
+            MainPrompt()
+            return
+        } else if (amount_of_threads > (Number(amount_of_threads) > (os.cpus().length - 3))) {
+            console.clear()
+            console.log(`\n${clc.redBright('Please input less threads as you need at least 3 left over for your computer to function normally!')}\n`);
+            MainPrompt()
+            return
         } else {
             console.clear()
-            console.log('\nPlease input less threads as you need at least 3 left over for your computer to function normally!\n');
+            console.log(`\nThere was an error when changing threads value\n`);
             MainPrompt()
             return
         }
@@ -59,47 +69,69 @@ function MainPrompt() {
             config.ram = amount_of_ram
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`RAM successfully set to ${amount_of_ram}!`);
+            console.log(`\n${clc.greenBright(`RAM successfully set to ${amount_of_ram}!`)}\n`);
+        } else if (!(Number(amount_of_ram) > 0 )) {
+            console.clear()
+            console.log(`\n${clc.redBright('Please input a value more than 0')}\n`);
+            MainPrompt()
+            return
+        } else if (Number(amount_of_ram) > 0 && (Number(amount_of_ram) >= (Math.ceil(os.totalmem() / (1024 * 1024 * 1024))))) {
+            console.clear()
+            console.log(`\n${clc.redBright('Please do not input more RAM then you have')}\n`);
+            MainPrompt()
+            return
         } else {
             console.clear()
-            console.log('\nPlease do not input more RAM then you have\n');
+            console.log(`\n${clc.redBright('There was an error when changing RAM value')}\n`);
             MainPrompt()
             return
         }
     } else if (answer === '3') {
         console.log('\n');
-        let type = prompt('What Stockfish type do you want to use? 1 - Compatible (Old CPUs) | 2 - Latest (Newer CPUs): ');
+        console.log('1 - Compatible (Old CPUs)');
+        console.log('2 - Latest (Newer CPUs)');
+        let type = prompt('What Stockfish type do you want to use?: ');
 
         if (type === '1') {
             config.stockfish = 'compatibility'
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log('Stockfish type successfully set to compatibility!');
+            console.log(`\n${clc.greenBright('Stockfish type successfully set to compatibility!')}\n`);
         } else if (type === '2') {
             config.stockfish = 'latest'
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log('Stockfish type successfully set to latest!');
+            console.log(`\n${clc.greenBright('Stockfish type successfully set to latest!')}\n`);
         } else {
             console.clear()
-            console.log('\nPlease input a valid answer\n');
+            console.log(`\n${clc.redBright('Please input a valid answer')}\n`);
             MainPrompt()
             return
         }
     } else if (answer === '4') {
         console.log('\n')
-        console.log('Do not put the depth too high as it will take forever to calculate (Recommended: 20 - 25)');
+        console.log(`Do not put the depth too high as it will take forever to calculate ${clc.greenBright('(Recommended: 20 - 25)')}`);
         let inputdepth = prompt('How many moves ahead do you want Stockfish to think?: ');
 
         if (isInt(inputdepth) && Number(inputdepth) > 0) {
             config.depth = inputdepth
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`Depth successfully set to ${inputdepth}!`);
+            console.log(`\n${clc.greenBright(`Depth successfully set to ${inputdepth}!`)}\n`);
+        } else if (!(Number(inputdepth) > 0 )) {
+            console.clear()
+            console.log(`\n${clc.redBright('Please input a value more than 0')}\n`);
+            MainPrompt()
+            return
+        } else {
+            console.clear()
+            console.log(`\n${clc.redBright('There was an error when changing depth value')}\n`);
+            MainPrompt()
+            return
         }
     } else {
         console.clear()
-        console.log('\nPlease input a valid answer\n');
+        console.log(`\n${clc.redBright('Please input a valid answer')}\n`);
         MainPrompt()
         return
     }
