@@ -35,6 +35,7 @@ function MainPrompt() {
     console.log(`2 - Change amount of RAM to use ${clc.blueBright(`(Your RAM amount - ${Math.ceil(os.totalmem() / (1024 * 1024 * 1024))}GB)`)} - ${clc.greenBright(`Current value: ${ram}`)}`);
     console.log(`3 - Change Stockfish type ${clc.blueBright('(Latest/Compatible)')} - ${clc.greenBright(`Current value: ${stockfish}`)}`)
     console.log(`4 - Change depth - ${clc.greenBright(`Current value: ${depth}`)}`)
+    console.log('\n');
     let answer = prompt('Answer (Press enter when you type either 1, 2, 3 or 4): ');
     
 
@@ -53,12 +54,12 @@ function MainPrompt() {
             return
         } else if (amount_of_threads > (Number(amount_of_threads) > (os.cpus().length - 3))) {
             console.clear()
-            console.log(`\n${clc.redBright('Please input less threads as you need at least 3 left over for your computer to function normally!')}\n`);
+            console.log(`${clc.redBright('Please input less threads as you need at least 3 left over for your computer to function normally!')}`);
             MainPrompt()
             return
         } else {
             console.clear()
-            console.log(`\nThere was an error when changing threads value\n`);
+            console.log(`There was an error when changing threads value`);
             MainPrompt()
             return
         }
@@ -69,20 +70,20 @@ function MainPrompt() {
             config.ram = amount_of_ram
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`\n${clc.greenBright(`RAM successfully set to ${amount_of_ram}!`)}\n`);
+            console.log(`${clc.greenBright(`RAM successfully set to ${amount_of_ram}!`)}`);
         } else if (!(Number(amount_of_ram) > 0 )) {
             console.clear()
-            console.log(`\n${clc.redBright('Please input a value more than 0')}\n`);
+            console.log(`${clc.redBright('Please input a value more than 0')}`);
             MainPrompt()
             return
         } else if (Number(amount_of_ram) > 0 && (Number(amount_of_ram) >= (Math.ceil(os.totalmem() / (1024 * 1024 * 1024))))) {
             console.clear()
-            console.log(`\n${clc.redBright('Please do not input more RAM then you have')}\n`);
+            console.log(`${clc.redBright('Please do not input more RAM then you have')}`);
             MainPrompt()
             return
         } else {
             console.clear()
-            console.log(`\n${clc.redBright('There was an error when changing RAM value')}\n`);
+            console.log(`${clc.redBright('There was an error when changing RAM value')}`);
             MainPrompt()
             return
         }
@@ -96,15 +97,15 @@ function MainPrompt() {
             config.stockfish = 'compatibility'
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`\n${clc.greenBright('Stockfish type successfully set to compatibility!')}\n`);
+            console.log(`${clc.greenBright('Stockfish type successfully set to compatibility!')}`);
         } else if (type === '2') {
             config.stockfish = 'latest'
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`\n${clc.greenBright('Stockfish type successfully set to latest!')}\n`);
+            console.log(`${clc.greenBright('Stockfish type successfully set to latest!')}`);
         } else {
             console.clear()
-            console.log(`\n${clc.redBright('Please input a valid answer')}\n`);
+            console.log(`${clc.redBright('Please input a valid answer')}`);
             MainPrompt()
             return
         }
@@ -117,21 +118,21 @@ function MainPrompt() {
             config.depth = inputdepth
             fs.writeFileSync('../settings.ini', ini.stringify(config))
             console.clear()
-            console.log(`\n${clc.greenBright(`Depth successfully set to ${inputdepth}!`)}\n`);
+            console.log(`${clc.greenBright(`Depth successfully set to ${inputdepth}!`)}`);
         } else if (!(Number(inputdepth) > 0 )) {
             console.clear()
-            console.log(`\n${clc.redBright('Please input a value more than 0')}\n`);
+            console.log(`${clc.redBright('Please input a value more than 0')}`);
             MainPrompt()
             return
         } else {
             console.clear()
-            console.log(`\n${clc.redBright('There was an error when changing depth value')}\n`);
+            console.log(`${clc.redBright('There was an error when changing depth value')}`);
             MainPrompt()
             return
         }
     } else {
         console.clear()
-        console.log(`\n${clc.redBright('Please input a valid answer')}\n`);
+        console.log(`${clc.redBright('Please input a valid answer')}`);
         MainPrompt()
         return
     }
