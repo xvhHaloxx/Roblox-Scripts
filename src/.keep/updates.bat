@@ -9,6 +9,7 @@ if exist ..\ops\setupdone.txt (
 ) else (
 
 	echo Npm packages are not installed!
+	echo Run the "Main.bat" file to install packages.
 
 	exit /B 0
 )
