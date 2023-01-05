@@ -1,5 +1,6 @@
 const ini = require('ini')
 const fs = require('fs')
+const fsextra = require('fs-extra')
 var downloadFileSync = require('download-file-sync');
 const prompt = require('prompt-sync')({sigint: true});
 const clc = require('cli-color');
@@ -7,10 +8,11 @@ const request = require('request-promise')
 const decompress = require('decompress')
 const path = require('path')
 const rimraf = require('rimraf')
+const { forceSync } = require('node-force-sync');
 
 var latestText = downloadFileSync('https://raw.githubusercontent.com/xvhHaloxx/Roblox-Scripts/main/Chess%20AI%20Stuff/latestversion.ini');
-fs.writeFile('../../ops/latest.ini', latestText, (err) => {
-    if (err) throw err;
+fs.writeFile('../../ops/latest.ini', latestText, (err10) => {
+    if (err10) throw err10;
 
     var currentIniFile = ini.parse(fs.readFileSync('../../settings.ini', 'utf-8'))
     var latestIniFile = ini.parse(fs.readFileSync('../../ops/latest.ini', 'utf-8'))
@@ -30,7 +32,7 @@ fs.writeFile('../../ops/latest.ini', latestText, (err) => {
 
     function downloadLatestVersion() {
         if (Number(mergedCurrent) < Number(mergedLatest)) {
-            console.log(`${clc.greenBright('New version is available would you like to download it?')}`);
+            console.log(`${clc.greenBright('New version is available! Would you like to download it?')}`);
             console.log('1 - Yes');
             console.log('2 - No');
             let answer = prompt('Answer - ')
@@ -43,73 +45,135 @@ fs.writeFile('../../ops/latest.ini', latestText, (err) => {
             }
 
             if (answer === '1') {
-                // const file = fs.createWriteStream("asd.zip"); // .assets[0].browser_download_url
-                // jsonformat.assets[0].browser_download_url
                 let thejson = downloadFileSync('https://api.github.com/repos/xvhHaloxx/Roblox-Scripts/releases/latest')
                 let jsonformat = JSON.parse(thejson)
 
                 let url = jsonformat.assets[0].browser_download_url;
                 let output = path.resolve(__dirname, '../updatedzip');
                 output = path.join(output, 'updated.zip')
-                console.log(clc.redBright('Do not press anything till it is finished or it can break!'));
+                console.log(clc.redBright('Do not press anything until it is finished!'));
                 
+                console.log('\nDeleting old files...');
+                try {
+                    let files1212 = fs.readdirSync(path.resolve(__dirname, '../../'))
+                    files1212.forEach(file => {
+                        let fileDir = path.join(`${path.resolve(__dirname, '../..')}`, file);
+                        if (file !== '.keep') {
+                            // Check if the file is a directory
+                            let stat = fs.statSync(fileDir);
+                            if (stat.isDirectory()) {
+                                // Delete the directory and all its contents
+                                try {
+                                    rimraf.sync(fileDir);
+                                } catch (err2) {
+                                    throw err2;
+                                }
+                            } else {
+                                // Delete the file
+                                try {
+                                    fs.unlinkSync(fileDir);
+                                    
+                                } catch (err3) {
+                                    throw err3;
+                                }
+                            }
+                        }
+                    });
+                } catch(err123123123) {throw err123123123}
+
+                try {
+                    let files121212 = fs.readdirSync(path.resolve(__dirname, '../../../'))
+                    files121212.forEach(file => {
+                        let fileDir = path.join(`${path.resolve(__dirname, '../../../')}`, file);
+                        if (file !== 'src') {
+                            // Check if the file is a directory
+                            let stat = fs.statSync(fileDir);
+                            if (stat.isDirectory()) {
+                                // Delete the directory and all its contents
+                                try {
+                                    rimraf.sync(fileDir);
+                                } catch (err2) {
+                                    throw err2;
+                                }
+                            } else {
+                                // Delete the file
+                                try {
+                                    fs.unlinkSync(fileDir);
+                                } catch (err3) {
+                                    throw err3;
+                                }
+                            }
+                        }
+                    });
+                } catch(err123123) {throw err123123}
+                console.log(clc.greenBright('Files deleted!'));
+
+                console.log('\nDownloading new update...');
                 request(url)
                     .pipe(fs.createWriteStream(output))
                     .on('finish', function () {
                         console.log(`${clc.greenBright('Zip downloaded!')}`);
                         // console.log('Rerun this file to completely install new version');
 
-                        console.log('\nDeleting old files...');
-                        fs.readdir(path.resolve(__dirname, '../../'), (err, files) => {
-                            if (err) {
-                                console.log(err);
-                            }
-                            files.forEach(file => {
-                                const fileDir = path.join(`${path.resolve(__dirname, '../..')}`, file);
-                                if (file !== '.keep') {
-                                    // Check if the file is a directory
-                                    const stat = fs.statSync(fileDir);
-                                    if (stat.isDirectory()) {
-                                        // Delete the directory and all its contents
-                                        try {
-                                            rimraf.sync(fileDir);
-                                        } catch (err) {
-                                            console.error(err);
-                                        }
-                                    } else {
-                                        // Delete the file
-                                        try {
-                                            fs.unlinkSync(fileDir);
-                                        } catch (err) {
-                                            console.error(err);
-                                        }
-                                    }
-                                }
-                            });
-                        });
-                        console.log(clc.greenBright('Files deleted'));
+                        
 
                         console.log('\nExtracting zip...');
-                        decompress(path.join(path.resolve(__dirname, '../updatedzip'), 'updated.zip'), path.resolve(__dirname, '../..'))
-                            .then(() => {
-                                console.log(clc.greenBright('Extraction complete'));
-                                fs.unlinkSync(path.join(path.resolve(__dirname, '../updatedzip'), 'updated.zip'))
-                                console.log(clc.greenBright('\nUpdate complete!'));
-                            })
-                            .catch((error) => {throw error});
 
-                        const keypress = async () => {
-                            process.stdin.setRawMode(true)
-                            return new Promise(resolve => process.stdin.once('data', () => {
-                                process.stdin.setRawMode(false)
-                                resolve()
-                            }))
-                            }
-                            
-                            ;(async () => {
-                            await keypress()
-                            
-                            })().then(process.exit)
+                        try {
+                            decompress(path.join(path.resolve(__dirname, '../updatedzip'), 'updated.zip'), path.resolve(__dirname, '../updatedzip/updated'))
+                            .then(() => {
+                                console.log(clc.greenBright('Extraction complete!'));
+                                console.log('\nMoving files...');
+                                rimraf.sync(path.join(path.resolve(__dirname, '../updatedzip/updated'), 'src', '.keep'));
+
+                                fs.unlinkSync(path.join(path.resolve(__dirname, '../updatedzip'), 'updated.zip'))
+
+                                try {
+                                    let files = fs.readdirSync(path.resolve(__dirname, '../updatedzip/updated'))
+
+                                    files.forEach(file => {
+                                        let fileDir = path.join(path.resolve(__dirname, '../updatedzip/updated'), file);
+                                        if (file === 'src') {
+                                            fs.readdir(fileDir, (srcErr, srcFiles) => {
+                                                if (srcErr) throw srcErr;
+                                                
+                                                srcFiles.forEach(srcFile => {
+                                                    let fileDir2 = path.join(path.resolve(__dirname, '../updatedzip/updated/src'), srcFile);
+                                                    let stat = fs.statSync(fileDir2);
+                                                
+                                                    if (stat.isDirectory()) {
+                                                        fs.renameSync(fileDir2, path.resolve(__dirname, `../../${srcFile}`))
+                                                    } else {
+                                                        fs.renameSync(fileDir2, path.resolve(__dirname, `../../${srcFile}`))
+                                                    }
+                                                })
+                                            })
+                                        } else {
+                                            let stat = fs.statSync(fileDir);
+                                            if (stat.isDirectory()) {
+                                                fsextra.moveSync(fileDir, path.resolve(__dirname, '../../..'))
+                                            } else {
+                                                fs.renameSync(fileDir, path.resolve(__dirname, `../../../${file}`))
+                                            }
+                                        }
+                                    })
+                                } catch(err) {throw err}
+                                console.log(clc.greenBright('\nUpdate complete!'));
+
+                                const keypress = async () => {
+                                    process.stdin.setRawMode(true)
+                                    return new Promise(resolve => process.stdin.once('data', () => {
+                                        process.stdin.setRawMode(false)
+                                        resolve()
+                                    }))
+                                    (async () => {
+                                        console.log('\nPress any key to exit...');
+                                        await keypress()
+                                    
+                                    })().then(process.exit)
+                                }
+                            })
+                        } catch (err) {throw err}
                     });
 
             } else if (answer === '2') {

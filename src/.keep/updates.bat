@@ -1,13 +1,16 @@
 @echo off
-if exist src\ops\setupdone.txt (
+if exist ..\ops\setupdone.txt (
 
-	cd src\.keep\updater
+	cd updater
 	call node .
+
+	exit /B 1
 
 ) else (
 
 	echo Npm packages are not installed!
 
+	exit /B 0
 )
 
 pause
