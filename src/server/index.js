@@ -27,9 +27,6 @@ async function setup() {
   await engine.setoption('Hash', (1024 * ram));
   await engine.setoption('Threads', threads);
 
-
-  await engine.setoption('UCI_Elo', 3800),
-  await engine.setoption('Skill Level', 25),
   await engine.setoption('UCI_LimitStrength', false)
   await engine.setoption('Ponder', true)
   await engine.isready();
