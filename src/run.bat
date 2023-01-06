@@ -49,6 +49,8 @@ If Exist "ops\setupdone.txt" (
         Call npm install
         call npm install ini
         call npm install cli-color
+        call npm install prompt-sync
+        call n
         PopD
     )
 
