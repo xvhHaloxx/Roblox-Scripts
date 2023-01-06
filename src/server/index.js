@@ -32,8 +32,6 @@ if (winReg.GetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsI
   } else {
     console.log('Ok :(\n');
   }
-} else {
-  console.log('already done');
 }
 
 var threads = config.threads
