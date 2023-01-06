@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "cli-color": "^2.0.3",
-    "ini": "^3.0.1",
-    "prompt-sync": "^4.2.0"
+    "ini": "^3.0.1"
   }
 }

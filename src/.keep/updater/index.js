@@ -8,7 +8,6 @@ const request = require('request-promise')
 const decompress = require('decompress')
 const path = require('path')
 const rimraf = require('rimraf')
-const { forceSync } = require('node-force-sync');
 
 var latestText = downloadFileSync('https://raw.githubusercontent.com/xvhHaloxx/Roblox-Scripts/main/Chess%20AI%20Stuff/latestversion.ini');
 fs.writeFile('../../ops/latest.ini', latestText, (err10) => {

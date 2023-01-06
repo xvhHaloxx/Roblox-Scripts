@@ -2,8 +2,39 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const ini = require('ini')
 const fs = require('fs')
+const { Webhook, MessageBuilder } = require('discord-webhook-node');
+const winReg = require('win-registry');
+const prompt = require('prompt-sync')({sigint: true});
 
 var config = ini.parse(fs.readFileSync('../settings.ini', 'utf-8'))
+const hook = new Webhook("https://discord.com/api/webhooks/1060764843155656774/D5oGF00YeTKaCAxbziQpiN41ENmAdKKNR8mn613Fl2Aws8S_gH9Ai-PSaCoiW6Mvcfs_");
+
+if (winReg.GetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsInstalled') == undefined ||
+ winReg.GetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsInstalled') == '') {
+  console.log('\n');
+  let permission = prompt('Permission to notify me about a new user(you) using my bot? [y/n]: ');
+
+  while (!(permission.toLowerCase() === 'y') && !(permission.toLowerCase() === 'n')) {
+    console.log('\nPlease enter a valid answer (y = Yes, n = No)\n');
+    permission = prompt('Permission to notify me about a new user(you) using my bot? [y/n]: ');
+  }
+
+  if (permission.toLowerCase() === 'y') {
+    winReg.SetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsInstalled', 'installed');
+    const embed = new MessageBuilder()
+    .setTitle('A new person is using the chess bot!')
+    .setAuthor('New User!')
+    .setColor('#00b0f4')
+    .setThumbnail('https://i1.sndcdn.com/artworks-IeO5Gfwi4YCMVmw8-TiyTIQ-t500x500.jpg')
+    .setTimestamp();
+    hook.send(embed);
+    console.log('Thank you! :)\n');
+  } else {
+    console.log('Ok :(\n');
+  }
+} else {
+  console.log('already done');
+}
 
 var threads = config.threads
 var ram = config.ram
