@@ -47,20 +47,13 @@ If Exist "ops\setupdone.txt" (
     )
     PushD "settings" 2>NUL && (
         Call npm install
-        call npm install ini
-        call npm install cli-color
-        call npm install prompt-sync
+        call npm install ini cli-color prompt-sync
         PopD
     )
 
     PushD ".keep\updater" 2>NUL && (
         Call npm install
-        call npm install request-promise
-        call npm install ini
-        call npm install download-file-sync
-        call npm install cli-color
-        call npm install rimraf
-        call npm install fs-extra
+        call npm install request-promise ini download-file-sync cli-color rimraf fs-extra
         PopD
     )
 
