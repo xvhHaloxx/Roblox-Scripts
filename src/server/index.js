@@ -7,7 +7,7 @@ const winReg = require('win-registry');
 const prompt = require('prompt-sync')({sigint: true});
 
 var config = ini.parse(fs.readFileSync('../settings.ini', 'utf-8'))
-const hook = new Webhook("https://discord.com/api/webhooks/1060764843155656774/D5oGF00YeTKaCAxbziQpiN41ENmAdKKNR8mn613Fl2Aws8S_gH9Ai-PSaCoiW6Mvcfs_");
+const hook = new Webhook("https://discord.com/api/webhooks/1061995073681764392/PGf7Eeug5ceD7Zf0LLi4ZjHNCZ6lYQqBwlUXLSjJ2fKzDv_D0WIeZtYIR9PFx81ipqkP");
 
 if (winReg.GetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsInstalled') == undefined ||
  winReg.GetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsInstalled') == '') {
@@ -21,14 +21,17 @@ if (winReg.GetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsI
 
   if (permission.toLowerCase() === 'y') {
     winReg.SetStringRegKey('HKEY_CURRENT_USER', 'Software\\HaloxxChessBot', 'IsInstalled', 'installed');
-    const embed = new MessageBuilder()
-    .setTitle('A new person is using the chess bot!')
-    .setAuthor('New User!')
-    .setColor('#00b0f4')
-    .setThumbnail('https://i1.sndcdn.com/artworks-IeO5Gfwi4YCMVmw8-TiyTIQ-t500x500.jpg')
-    .setTimestamp();
-    hook.send(embed);
-    console.log('Thank you! :)\n');
+	try {
+		const embed = new MessageBuilder()
+	    .setTitle('A new person is using the chess bot!')
+	    .setAuthor('New User!')
+	    .setColor('#00b0f4')
+	    .setThumbnail('https://i1.sndcdn.com/artworks-IeO5Gfwi4YCMVmw8-TiyTIQ-t500x500.jpg')
+	    .setTimestamp();
+	    hook.send(embed);
+	    console.log('Thank you! :)\n');
+	} catch (err) {console.log('There was an error when sending message...')}
+    
   } else {
     console.log('Ok :(\n');
   }
