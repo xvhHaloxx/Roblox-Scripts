@@ -58,8 +58,8 @@ local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shle
 
 local Window = Rayfield:CreateWindow({
     Name = "Chess Script",
-    -- LoadingTitle = "Loading Chess Script",
-    -- LoadingSubtitle = "By Haloxx",
+    LoadingTitle = "Loading Chess Script",
+    LoadingSubtitle = "By Haloxx",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "Chess Script Config", -- Create a custom folder for your hub/game
